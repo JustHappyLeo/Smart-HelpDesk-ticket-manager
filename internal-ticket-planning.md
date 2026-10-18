@@ -15,7 +15,8 @@ List each kind of user and what they can do.
 | Role | Create tickets | View tickets | Assign tickets | Change status | Manage users/settings |
 |---|---|---|---|---|---|
 | Employee/requester | Y | Y | N | not all status | N |
-| Support/agent | Y in his group | Y in his group | Y in his group | Y in his group | N |
+| Group Member | Y in his group | Y in his group | Self-assign or request another member's approval | Assigned tickets only | N |
+| Group Team Leader | Y in his group | Y in his group | Y in his group | Y in his group | N |
 | TicketManager | Y | Y | Y | Y | N |
 | Administrator | Y | Y | Y | Y | Y |
 
@@ -36,7 +37,7 @@ Add, remove, or rename roles to match your company.
     Low = Minor improvements of the workflow
     In customized projects there might be custom deifitions for the priority
 - **Teams, categories, or queues:** Every group/subgroup has its queue of tickets
-- **Assignment rules:** every ticket can be assigned to one or more team/user/project. the assign can be done base on permissions
+- **Assignment rules:** members can assign tickets to themselves or request that another member take a ticket; the target member must approve. Team Leaders can assign or unassign tickets for anyone in their group.
 - **What counts as a successful resolution?** The problem has been identified and resolved
 
 ## 4. Main workflows
@@ -211,4 +212,10 @@ Cybersecurity minimums for this project:
 - Enforce rate limiting, CSRF protection, and secure session management for all authenticated actions.
 - Prefer server-side authorization for final enforcement; browser-side checks are only a UX aid.
 
-For the prototype phase, the browser UI uses mocked data and local browser storage only, but the design should follow the same principles so the app can move into a secure production architecture without major redesign.
+The current demo uses a same-origin Node.js API and MySQL. The API issues opaque random session tokens as HttpOnly cookies, stores only token hashes, resolves the associated user on each request, and enforces ticket/group permissions server-side. Demo credentials and seed data are for local development only; production requires HTTPS, non-demo credentials, and appropriately restricted database access.
+
+Users in the Human Resources group and users with the Administrator role may manage user profiles. Password changes and group management are Administrator-only; HR authorization is determined by group membership, not by trusting the profile's department label.
+
+Departments are separate records from ticket groups and are managed from their own tab by Human Resources group members and Administrators. User profiles reference a department record; ticket queue visibility and assignment continue to use ticket-group membership.
+
+Each membership has a `Member` or `Team Leader` role in `group_roles`. Administrator and Ticket Manager remain global account roles. Team Leaders can manage group tickets; group statistics are planned but not implemented.

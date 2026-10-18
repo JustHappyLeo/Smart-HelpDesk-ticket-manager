@@ -1,0 +1,19 @@
+{
+  "name": "smart-helpdesk-ticket-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart HelpDesk ticket manager with a MySQL-backed session API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0"
+  }
+}
